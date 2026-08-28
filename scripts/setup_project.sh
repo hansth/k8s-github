@@ -1,0 +1,11 @@
+#!/bin/bash
+
+# Install and setup pre-commit defined in mise.toml
+if ! command -v cz >/dev/null && [ "$DEVPOD" = "true" ]; then
+  git config --global push.autoSetupRemote true
+  git config --global --add safe.directory /workspaces/study-app
+  pip install --user pipx
+  pipx install commitizen
+  pre-commit install
+  pre-commit install --hook-type commit-msg
+fi
