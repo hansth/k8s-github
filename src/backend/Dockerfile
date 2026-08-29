@@ -23,8 +23,17 @@ RUN --mount=type=cache,target=/root/.cache/uv \
 # final layer
 FROM python:3.13-alpine
 
+# create a non-root user and group
+RUN addgroup -S -g 1000 app && adduser -S -u 1000 -G app app
+
 # copy env-vars from the builder `app` directory
 COPY --from=builder --chown=app:app /app/.venv /app/.venv
+
+# switch to non-root user
+USER app
+
+# expose the container port
+EXPOSE 22112
 
 # run the application
 CMD ["/app/.venv/bin/study-tracker-api"]
