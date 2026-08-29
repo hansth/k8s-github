@@ -6,9 +6,10 @@ readme = "README.md"
 authors = [{ name = "Hans ter Horst", email = "hans@hansterhorst.com" }]
 requires-python = ">=3.13"
 dependencies = [
-    "fastapi>=0.141.1",
-    "httpx>=0.28.1",
-    "uvicorn>=0.52.4",
+  "fastapi>=0.141.1",
+  "httpx>=0.28.1",
+  "ruff>=0.11.6",
+  "uvicorn>=0.52.4",
 ]
 
 [project.scripts]
