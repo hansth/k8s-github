@@ -1,0 +1,56 @@
+name: Backend Tests
+
+# triggers events
+on:
+  pull_request:
+
+jobs:
+  # check if files are changed before running the other test jobs
+  check_paths:
+    runs-on: ubuntu-latest
+    outputs:
+      should_run: ${{ steps.filter.outputs.backend }}
+    steps:
+      # check out the repo
+      - uses: actions/checkout@v4
+      # compares the file changes agaist a set of patterns
+      - uses: dorny/paths-filter@v3.0.2
+        id: filter
+        with:
+          filters: |
+            backend:
+              - 'src/backend/**'
+              - '.github/workflows/backend-tests.yaml'
+  # backend linting and tests, only if files are changed
+  test:
+    name: Test Backend
+    needs: check_paths
+    if: ${{ needs.check_paths.outputs.should_run == 'true' }}
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./src/backend
+
+    steps:
+      # clone the repo into the runner
+      - name: Checkout code
+        uses: actions/checkout@v4
+      # install uv package manager
+      - name: Install UV
+        uses: astral-sh/setup-uv@v5
+      # install python with uv
+      - name: Set up Python
+        run: uv python install
+      # build and install dependencies
+      - name: Install dependencies
+        run: |
+          uv sync --locked --dev
+      # runs the linter and tests the code, and checks the formatting
+      - name: Lint with Ruff
+        run: |
+          uv run ruff check --output-format=github --target-version=py313 src tests
+          uv run ruff format --diff --check --target-version=py313 src tests
+      # test the backend with pytest
+      - name: Run tests with coverage
+        run: |
+          uv run pytest
