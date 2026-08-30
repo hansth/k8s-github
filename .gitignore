@@ -3,4 +3,4 @@
 # PYTHON
 # backend runtime data store (generated on first POST /sessions)
 src/backend/src/data/sessions.csv
-src/backend/*coverage*
+src/*/*coverage*
