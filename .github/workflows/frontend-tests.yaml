@@ -21,7 +21,7 @@ jobs:
             frontend:
               - 'src/frontend/**'
               - '.github/workflows/frontend-tests.yaml'
-  # backend linting and tests, only if files are changed
+  # frontend linting and tests, only if files are changed
   test:
     name: Test Frontend
     needs: check_paths
@@ -50,8 +50,6 @@ jobs:
         run: |
           uv run ruff check --output-format=github --target-version=py313 src tests
           uv run ruff format --diff --check --target-version=py313 src tests
-<<<<<<< Updated upstream
-=======
       # testing the frontend with coverage
       - name: Run tests with coverage
         run: |
@@ -106,4 +104,3 @@ jobs:
           ignore-unfixed: true
           vuln-type: "os,library"
           severity: "CRITICAL,HIGH"
->>>>>>> Stashed changes

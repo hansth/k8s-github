@@ -5,13 +5,13 @@ description = "Frontend for DevOps Study Tracker application"
 readme = "README.md"
 authors = [{ name = "Hans ter Horst", email = "hans@hansterhorst.com" }]
 requires-python = ">=3.13"
-dependencies = [
-    "flask>=3.1.3",
-    "requests>=2.34.2",
-]
+dependencies = ["flask>=3.1.3", "requests>=2.34.2"]
 
 [project.scripts]
 study-tracker-frontend = "frontend.main:main"
+
+[tool.pytest.ini_options]
+asyncio_default_fixture_loop_scope = "function"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/frontend"]
@@ -25,4 +25,5 @@ dev = [
     "ruff==0.11.6",
     "pytest>=9.1.1",
     "responses>=0.26.3",
+    "pytest-cov>=7.1.0",
 ]
