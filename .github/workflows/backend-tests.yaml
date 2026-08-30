@@ -81,15 +81,20 @@ jobs:
 
   # container image scanning with trivy
   container-scan:
+    name: Scanning container for vulnerabilities
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./src/backend
     steps:
+      # checkout repository
       - name: Checkout code
         uses: actions/checkout@v4
-
+      # build container image
       - name: Build an image
         run: |
           docker build -t backend:${{ github.sha }} .
-
+      # scan container for vulnerabilities
       - name: Run Trivy vulnerability scanner
         uses: lazy-actions/gitrivy@v3
         with:
