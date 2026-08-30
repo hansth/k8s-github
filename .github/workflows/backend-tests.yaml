@@ -78,3 +78,24 @@ jobs:
           header: test-coverage
           recreate: true
           path: code-coverage-results.md
+
+  # container image scanning with trivy
+  container-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build an image
+        run: |
+          docker build -t backend:${{ github.sha }} .
+
+      - name: Run Trivy vulnerability scanner
+        uses: lazy-actions/gitrivy@v3
+        with:
+          image-ref: "backend:${{ github.sha }}"
+          format: "table"
+          exit-code: "0" # "1" failed the workflow if vulnerabilities found
+          ignore-unfixed: true
+          vuln-type: "os,library"
+          severity: "CRITICAL,HIGH"
