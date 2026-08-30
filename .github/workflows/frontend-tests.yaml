@@ -50,3 +50,60 @@ jobs:
         run: |
           uv run ruff check --output-format=github --target-version=py313 src tests
           uv run ruff format --diff --check --target-version=py313 src tests
+<<<<<<< Updated upstream
+=======
+      # testing the frontend with coverage
+      - name: Run tests with coverage
+        run: |
+          uv run pytest tests/ -v --cov=src/frontend --cov-report=xml --cov-fail-under=80
+      # useful for analyzing with other programs
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: ./src/frontend/coverage.xml
+          retention-days: 7
+        if: ${{ always() }}
+
+      - name: Coverage Report
+        uses: irongut/CodeCoverageSummary@v1.3.0
+        with:
+          filename: ./src/frontend/coverage.xml
+          badge: true
+          format: markdown
+          output: both
+
+      - name: Add Coverage PR Comment
+        uses: marocchino/sticky-pull-request-comment@v2
+        if: github.event_name == 'pull_request'
+        with:
+          header: test-coverage
+          recreate: true
+          path: code-coverage-results.md
+
+  # container image scanning with trivy
+  container-scan:
+    name: Scanning container for vulnerabilities
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./src/frontend
+    steps:
+      # checkout repository
+      - name: Checkout code
+        uses: actions/checkout@v4
+      # build container image
+      - name: Build an image
+        run: |
+          docker build -t frontend:${{ github.sha }} .
+      # scan container for vulnerabilities
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@v0.35.0
+        with:
+          image-ref: "frontend:${{ github.sha }}"
+          format: "table"
+          exit-code: "0" # "1" failed the workflow if vulnerabilities found
+          ignore-unfixed: true
+          vuln-type: "os,library"
+          severity: "CRITICAL,HIGH"
+>>>>>>> Stashed changes
