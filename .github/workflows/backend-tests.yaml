@@ -50,3 +50,7 @@ jobs:
         run: |
           uv run ruff check --output-format=github --target-version=py313 src tests
           uv run ruff format --diff --check --target-version=py313 src tests
+      # test the backend with pytest
+      - name: Run tests with coverage
+        run: |
+          uv run pytest
