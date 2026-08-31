@@ -19,6 +19,7 @@ from .config import (
 ### TRIGGER FOR CI PIPELINE ###
 ### add a comment to trigger the ci pipeline to build the container image
 ### 31-08-2026 trigger ci pipeline without changed the code
+### 31-08-2026 trigger ci pipeline without changed the code
 
 # Configure logging
 logging.basicConfig(
