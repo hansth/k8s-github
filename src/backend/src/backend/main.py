@@ -16,6 +16,10 @@ from .config import (
     CORS_ALLOW_HEADERS,
 )
 
+### TRIGGER FOR CI PIPELINE ###
+### add a comment to trigger the ci pipeline to build the container image
+### 31-08-2026 trigger ci pipeline without changed the code
+
 # Configure logging
 logging.basicConfig(
     level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
